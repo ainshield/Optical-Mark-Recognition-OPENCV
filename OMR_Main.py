@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import utlis
+import db
 
 
 ########################################################################
@@ -10,9 +11,9 @@ cap = cv2.VideoCapture(1)
 cap.set(10,160)
 heightImg = 700
 widthImg  = 700
-questions=5
+questions=30
 choices=5
-ans= [1,2,0,2,4]
+ans= db.anskey
 ########################################################################
 
 
