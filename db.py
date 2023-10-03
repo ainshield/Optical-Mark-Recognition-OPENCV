@@ -12,7 +12,7 @@ cursor = conn.cursor()
 #        SQL COMMANDS         #
 ###############################
 
-uniqueCode = ['yZX6t1']
+uniqueCode = ['hF6DaF']
 query = "SELECT anskey FROM `tbl_ans` WHERE uniqueCode = %s"
 cursor.execute(query,(uniqueCode))
 

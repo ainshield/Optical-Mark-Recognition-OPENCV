@@ -5,15 +5,17 @@ import db
 
 
 ########################################################################
-webCamFeed = True
-pathImage = "5.jpg"
+webCamFeed = False
+pathImage = "2.jpg"
 cap = cv2.VideoCapture(1)
 cap.set(10,160)
 heightImg = 700
 widthImg  = 700
 questions=30
 choices=5
-ans= db.anskey
+# ans= [1,2,0,2,4]
+str_ans =db.anskey.split(",")
+ans = [eval(i) for i in str_ans]
 ########################################################################
 
 
@@ -65,7 +67,7 @@ while True:
             imgThresh = cv2.threshold(imgWarpGray, 170, 255,cv2.THRESH_BINARY_INV )[1] # APPLY THRESHOLD AND INVERSE
 
             boxes = utlis.splitBoxes(imgThresh) # GET INDIVIDUAL BOXES
-            cv2.imshow("Split Test ", boxes[3])
+            # cv2.imshow("Split Test ", boxes[3])
             countR=0
             countC=0
             myPixelVal = np.zeros((questions,choices)) # TO STORE THE NON ZERO VALUES OF EACH BOX
@@ -116,7 +118,8 @@ while True:
             # IMAGE ARRAY FOR DISPLAY
             imageArray = ([img,imgGray,imgCanny,imgContours],
                           [imgBigContour,imgThresh,imgWarpColored,imgFinal])
-            cv2.imshow("Final Result", imgFinal)
+            showfinal = cv2.imshow("Final Result", imgFinal)
+            showfinal
     except:
         imageArray = ([img,imgGray,imgCanny,imgContours],
                       [imgBlank, imgBlank, imgBlank, imgBlank])
@@ -126,7 +129,8 @@ while True:
               ["Biggest Contour","Threshold","Warpped","Final"]]
 
     stackedImage = utlis.stackImages(imageArray,0.5,lables)
-    cv2.imshow("Result",stackedImage)
+    # cv2.imshow("Result",stackedImage)
+
 
     # SAVE IMAGE WHEN 's' key is pressed
     if cv2.waitKey(1) & 0xFF == ord('s'):
