@@ -1,31 +1,37 @@
 import cv2
 import numpy as np
 from flask import Flask, url_for, render_template, Response, request
-import mysql.connector
 import utils
+import db
 
 #GLOBAL VARIABLES##########
 app = Flask(__name__)
-heightImg = 700
-widthImg  = 700
+heightImg = 1280//2
+widthImg  = 720//2
 
 #change question count according to test paper
-questions=5
+questions=50
 choices=5
-
-ans= [1,2,0,2,4]
+imgpath = 'img1.jpg'
+# ans = [1,2,0,2,4]
 count=0
-webcamFeed = True
+webcamFeed = False
+
 ###########################
 
-@app.route('/')
+@app.route('/', methods = ['GET','POST'])
 def index():
-    return render_template('index.html')
 
-# @app.route('/query', methods=['POST'])
-# def query():
-#     uniqueCode = request.form.get['code']
-#     return f"showing answers for {uniqueCode}"
+    uniqueCode = [(request.form.get('code'))]
+    global ans
+    ans = db.sqlquery(uniqueCode)
+    try:
+        ans = ans.split(",")
+        ans = [int(i) for i in ans]
+    except:
+        pass
+    
+    return render_template('index.html')
 
 def omr_processing():
 ##Video Capture
@@ -34,7 +40,7 @@ def omr_processing():
     
     while True: 
         if webcamFeed:success, frame = cap.read()
-        else:frame = cv2.imread('1.jpg')
+        else:frame = cv2.imread(imgpath)
 
 ##OMR PROCESSING##
 ##processed_frame gets outputted to video_feed
@@ -59,7 +65,9 @@ def omr_processing():
             #FIND RECTANGLES
             rectCon = utils.rectContour(contours)
             biggestContour = utils.getCornerPoints(rectCon[0])
+            # print(biggestContour)
             gradePoints = utils.getCornerPoints(rectCon[1])
+            # print(gradePoints)
 
             if biggestContour.size != 0 and gradePoints.size != 0:
                 
