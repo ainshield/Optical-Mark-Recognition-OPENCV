@@ -38,7 +38,7 @@ def reorder(myPoints):
     return myPointsNew
 
 def splitBoxes(img):
-    rows = np.vsplit(img, 5)
+    rows = np.vsplit(img, 10)
     boxes = []
     for r in rows:
         cols = np.hsplit(r, 5)

@@ -6,16 +6,16 @@ import db
 
 #GLOBAL VARIABLES##########
 app = Flask(__name__)
-heightImg = 1280//2
-widthImg  = 720//2
+heightImg = 720
+widthImg  = 1280
 
 #change question count according to test paper
-questions=50
+questions=10
 choices=5
-imgpath = 'img1.jpg'
-# ans = [1,2,0,2,4]
+imgpath = '1.jpg'
+# ans = [1,2,0,2,4] {1:[1,2,0,2,4]},
 count=0
-webcamFeed = False
+webcamFeed = True
 
 ###########################
 
@@ -65,9 +65,7 @@ def omr_processing():
             #FIND RECTANGLES
             rectCon = utils.rectContour(contours)
             biggestContour = utils.getCornerPoints(rectCon[0])
-            # print(biggestContour)
             gradePoints = utils.getCornerPoints(rectCon[1])
-            # print(gradePoints)
 
             if biggestContour.size != 0 and gradePoints.size != 0:
                 
