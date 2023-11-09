@@ -10,7 +10,7 @@ heightImg = 700
 widthImg  = 700
 
 #change question count according to test paper
-questions=10
+questions=50
 choices=5
 imgpath = 'test10(1).jpg'
 # ans = [1,2,0,2,4] {1:[1,2,0,2,4]},
@@ -28,6 +28,7 @@ def index():
     try:
         ans = ans.split(",")
         ans = [int(i) for i in ans]
+        print(ans)
     except:
         pass
     
@@ -89,9 +90,12 @@ def omr_processing():
 
                 #APPLY THRESHOLD
                 imgWarpGray = cv2.cvtColor(imgWarpColored,cv2.COLOR_BGR2GRAY)
+                
+                ## Threshold must be changed to allow the camera device to correctly read the image
+                
                 imgThresh = cv2.threshold(imgWarpGray, 140, 255, cv2.THRESH_BINARY_INV)[1]
 
-                boxes = utils.splitBoxes(imgThresh)
+                boxes = utils.splitBoxes(imgThresh,questions,choices)
                 
                 #GETTING NON ZERO PIXEL VALUES OF EACH BOX
                 myPixelVal = np.zeros((questions,choices))
@@ -135,7 +139,7 @@ def omr_processing():
                 imgInvWarp = cv2.warpPerspective(imgRawDrawing,invMatrix,(widthImg,heightImg))
                 
                 imgRawGrade = np.zeros_like(imgGradeDisplay)
-                cv2.putText(imgRawGrade, str(int(score)) + "%", (60, 100), cv2.FONT_HERSHEY_COMPLEX, 3, (0, 255, 255), 3)
+                cv2.putText(imgRawGrade, str(int(score)) + "%", (60, 100), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 255), 3)
                 invMatrixG = cv2.getPerspectiveTransform(ptG2,ptG1)
                 imgInvGradeDisplay = cv2.warpPerspective(imgRawGrade,invMatrixG,(widthImg,heightImg))
 

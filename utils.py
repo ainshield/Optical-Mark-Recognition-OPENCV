@@ -38,11 +38,11 @@ def reorder(myPoints):
     return myPointsNew
 
 #adjust the number of vsplit to change the number of questions of the exam 
-def splitBoxes(img):
-    rows = np.vsplit(img, 10)
+def splitBoxes(img,questions,choices):
+    rows = np.vsplit(img, questions)
     boxes = []
     for r in rows:
-        cols = np.hsplit(r, 5)
+        cols = np.hsplit(r, choices)
         for box in cols:
             boxes.append(box)
     return boxes
@@ -50,7 +50,9 @@ def splitBoxes(img):
 def showAnswers(img, myIndex, grading, ans, questions, choices):
     secW = int(img.shape[1]/questions)
     secH = int(img.shape[0]/choices)
-    
+    # print(myIndex, grading, ans, questions, choices)
+    print((int(img.shape[1])),(int(img.shape[0])))
+
     for x in range (0, questions):
         myAns = myIndex[x]
         cX = (myAns*secW) + secW//2
