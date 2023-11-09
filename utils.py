@@ -37,6 +37,7 @@ def reorder(myPoints):
 
     return myPointsNew
 
+#adjust the number of vsplit to change the number of questions of the exam 
 def splitBoxes(img):
     rows = np.vsplit(img, 10)
     boxes = []

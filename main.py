@@ -6,16 +6,16 @@ import db
 
 #GLOBAL VARIABLES##########
 app = Flask(__name__)
-heightImg = 720
-widthImg  = 1280
+heightImg = 700
+widthImg  = 700
 
 #change question count according to test paper
 questions=10
 choices=5
-imgpath = '1.jpg'
+imgpath = 'test10(1).jpg'
 # ans = [1,2,0,2,4] {1:[1,2,0,2,4]},
 count=0
-webcamFeed = True
+webcamFeed = False
 
 ###########################
 
@@ -57,6 +57,8 @@ def omr_processing():
         blur = cv2.GaussianBlur(gray, (5, 5), 1)
         canny = cv2.Canny(blur, 10, 50)
 
+    ##START OF OMR PROCESSING ALGORITHM
+
         try:
             #FIND CONTOURS
             contours, hierarchy = cv2.findContours(canny, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
@@ -79,8 +81,7 @@ def omr_processing():
                 pt2 = np.float32([[0,0],[widthImg,0],[0,heightImg],[widthImg,heightImg]])
                 matrix = cv2.getPerspectiveTransform(pt1,pt2)
                 imgWarpColored = cv2.warpPerspective(frame,matrix,(widthImg,heightImg))
-                
-                #fix suggestion: tweak matrixG to adjust to test paper size
+
                 ptG1 = np.float32(gradePoints)
                 ptG2 = np.float32([[0,0],[325,0],[0,150],[325,150]])
                 matrixG = cv2.getPerspectiveTransform(ptG1,ptG2)
@@ -88,7 +89,7 @@ def omr_processing():
 
                 #APPLY THRESHOLD
                 imgWarpGray = cv2.cvtColor(imgWarpColored,cv2.COLOR_BGR2GRAY)
-                imgThresh = cv2.threshold(imgWarpGray, 170, 255, cv2.THRESH_BINARY_INV)[1]
+                imgThresh = cv2.threshold(imgWarpGray, 140, 255, cv2.THRESH_BINARY_INV)[1]
 
                 boxes = utils.splitBoxes(imgThresh)
                 
